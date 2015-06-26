@@ -23,6 +23,20 @@ lcd.address(0x62)
 lcd.writeReg(0, 0)
 lcd.writeReg(1, 0)
 
-lcd.writeReg(char('0x08'), char('0xAA'))
+lcd.writeReg(char('0x08'), char('0x88'))
 lcd.writeReg(char('0x04'), 255)
 lcd.writeReg(char('0x02'), 255)
+
+periodicActivity();
+
+ledval = 97
+
+function periodicLCDActivity()
+{
+    lcd.writeReg(ledval);
+    ledval++;
+    if (ledval > 126) {
+	ledval = 97;
+    }
+    setTimeout(periodicActivity,500); //call the indicated function after 1 second (1000 milliseconds)
+}
