@@ -39,5 +39,5 @@ function periodicLCDActivity()
     if (ledval > 126) {
 	ledval = 97;
     }
-    setTimeout(periodicActivity,1000); //call the indicated function after 1 second (1000 milliseconds)
+    setTimeout(periodicLCDActivity,1000); //call the indicated function after 1 second (1000 milliseconds)
 }
