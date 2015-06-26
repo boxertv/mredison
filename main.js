@@ -33,10 +33,11 @@ ledval = 97
 
 function periodicLCDActivity()
 {
-    lcd.writeReg(ledval);
+    lcd.write(char('0x40'), ledval)
+    console.log(ledval);
     ledval++;
     if (ledval > 126) {
 	ledval = 97;
     }
-    setTimeout(periodicActivity,500); //call the indicated function after 1 second (1000 milliseconds)
+    setTimeout(periodicActivity,1000); //call the indicated function after 1 second (1000 milliseconds)
 }
