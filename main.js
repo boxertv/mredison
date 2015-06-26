@@ -17,7 +17,7 @@ function periodicActivity()
 }
 
 // From https://github.com/intel-iot-devkit/mraa/blob/v0.7.2/examples/javascript/rgblcd.js
-lcd = new m.I2c(0)
+lcd = new mraa.I2c(0)
 
 lcd.address(0x62)
 lcd.writeReg(0, 0)
