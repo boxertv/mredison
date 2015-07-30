@@ -5,10 +5,20 @@ FROM resin/edison-python:latest
 
 ENV INITSYSTEM on
 
+# https://github.com/intel-iot-devkit/upm/blob/master/docs/building.md
+RUN git clone https://github.com/intel-iot-devkit/upm.git && \
+    cd upm && \
+    mkdir build && \
+    cd build && \
+    cmake .. -DBUILDSWIGNODE=OFF && \
+    make && \
+    make install
+
 ADD /mredison /mredison
 
 RUN pip install -r /mredison/requirements.txt
 
 WORKDIR /mredison
 
-CMD ["python", "mredison.py"]
+# How to get the absolute path out of this?
+CMD ["python", "/mredison/mredison.py"]
