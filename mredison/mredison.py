@@ -1,6 +1,7 @@
 import mraa
 import time
 import pyupm_i2clcd as lcd
+import os
 
 myLcd = lcd.Jhd1313m1(0, 0x3E, 0x62)
 
@@ -16,7 +17,9 @@ x.dir(mraa.DIR_OUT)
 period = 0.15
 ledvalue = 1
 
-long_string = ' '*15 + 'Hello Mr. Edison, what\'s going on?' + ' '*15
+filler_text = os.getenv('LONGTEXT', 'Hello Mr. Edison, what\'s going on?')
+
+long_string = ' '*15 + filler_text + ' '*15
 while(1):
     for i in range(len(long_string) - 16 + 1):
          framebuffer = long_string[i:i+16]
