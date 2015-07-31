@@ -2,8 +2,13 @@
 # Info also from: http://docs.resin.io/#/pages/configuration/resin-base-images.md
 
 FROM resin/edison-python:latest
+MAINTAINER Gergely Imreh <imrehg@gmail.com>
 
 ENV INITSYSTEM on
+
+ADD /mredison /mredison
+
+RUN pip install -r /mredison/requirements.txt
 
 # https://github.com/intel-iot-devkit/upm/blob/master/docs/building.md
 RUN git clone https://github.com/intel-iot-devkit/upm.git && \
@@ -13,10 +18,6 @@ RUN git clone https://github.com/intel-iot-devkit/upm.git && \
     cmake .. -DBUILDSWIGNODE=OFF && \
     make && \
     make install
-
-ADD /mredison /mredison
-
-RUN pip install -r /mredison/requirements.txt
 
 WORKDIR /mredison
 
