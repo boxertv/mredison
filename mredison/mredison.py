@@ -56,6 +56,7 @@ class TestBot(irc.bot.SingleServerIRCBot):
 		h.update(user)
 		r, g, b = int(h.hexdigest()[0:2], 16), int(h.hexdigest()[2:4], 16), int(h.hexdigest()[4:6], 16)
 		print "%s: %s" %(user, message)
+		myLcd.clear()
 		myLcd.setColor(r, g, b)
 		myLcd.setCursor(0,0)
 		myLcd.write("%s:" %(user))
