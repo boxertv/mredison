@@ -20,5 +20,6 @@ RUN pip install -r /mredison/requirements.txt
 
 WORKDIR /mredison
 
-# How to get the absolute path out of this?
-CMD ["./startscript.sh"]
+COPY ./docker-entrypoint.sh /
+
+CMD ["/docker-entrypoint.sh"]
