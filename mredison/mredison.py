@@ -17,7 +17,7 @@ x.dir(mraa.DIR_OUT)
 period = 0.15
 ledvalue = 1
 
-filler_text = os.getenv('LONGTEXT', 'Hello Mr. Edison, what\'s going on?')
+filler_text = 'Hello Mr. Edison, what\'s going on?'
 
 long_string = ' '*15 + filler_text + ' '*15
 while(1):
