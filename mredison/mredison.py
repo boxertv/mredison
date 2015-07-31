@@ -57,7 +57,7 @@ class TestBot(irc.bot.SingleServerIRCBot):
 		print "%s: %s" %(user, message)
 		myLcd.setColor(r, g, b)
 		myLcd.setCursor(0,0)
-		myLcd.write("%s:", %(user))
+		myLcd.write("%s:" %(user))
 		myLcd.setCursor(1,0)
 		myLcd.write(message)
 		return
