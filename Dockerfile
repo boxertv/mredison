@@ -7,9 +7,9 @@ MAINTAINER Gergely Imreh <imrehg@gmail.com>
 ENV INITSYSTEM on
 
 ENV UPMCOMMIT 03e72e02f811cb9a47000a6f12fca61a2908d325
-RUN curl -sSL https://github.com/intel-iot-devkit/upm/archive/${UMPCOMMIT}.tar.gz \
+RUN curl -sSL https://github.com/intel-iot-devkit/upm/archive/$UPMCOMMIT.tar.gz \
 		| tar -v -C /usr/src -xz && \
-    cd /usr/src/upm-${UMPCOMMIT} && \
+    cd /usr/src/upm-$UPMCOMMIT && \
     mkdir build && \
     cd build && \
     cmake .. -DBUILDSWIGNODE=OFF && \
