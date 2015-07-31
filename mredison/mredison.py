@@ -41,6 +41,9 @@ class TestBot(irc.bot.SingleServerIRCBot):
 		irc.bot.SingleServerIRCBot.__init__(self, [(server, port)], nickname, nickname)
 		self.channel = channel
 
+	def on_nicknameinuse(self, c, e):
+		c.nick(c.get_nickname() + "_")
+
 	def on_welcome(self, c, e):
 		print "connected"
 		c.join(self.channel)
