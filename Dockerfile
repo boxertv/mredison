@@ -21,4 +21,4 @@ RUN pip install -r /mredison/requirements.txt
 WORKDIR /mredison
 
 # How to get the absolute path out of this?
-CMD ["python", "/mredison/mredison.py"]
+CMD ["./startscript.sh"]
