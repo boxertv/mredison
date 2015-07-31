@@ -6,18 +6,20 @@ MAINTAINER Gergely Imreh <imrehg@gmail.com>
 
 ENV INITSYSTEM on
 
-ADD /mredison /mredison
-
-RUN pip install -r /mredison/requirements.txt
-
 # https://github.com/intel-iot-devkit/upm/blob/master/docs/building.md
-RUN git clone https://github.com/intel-iot-devkit/upm.git && \
+RUN git clone --depth 1 https://github.com/intel-iot-devkit/upm.git && \
     cd upm && \
     mkdir build && \
     cd build && \
     cmake .. -DBUILDSWIGNODE=OFF && \
     make && \
     make install
+
+# Cached correctly
+ADD ./requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+
+ADD /mredison /mredison
 
 WORKDIR /mredison
 
