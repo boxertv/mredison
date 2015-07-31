@@ -6,9 +6,10 @@ MAINTAINER Gergely Imreh <imrehg@gmail.com>
 
 ENV INITSYSTEM on
 
-# https://github.com/intel-iot-devkit/upm/blob/master/docs/building.md
-RUN git clone --depth 1 https://github.com/intel-iot-devkit/upm.git && \
-    cd upm && \
+ENV UPMCOMMIT 03e72e02f811cb9a47000a6f12fca61a2908d325
+RUN curl -sSL https://github.com/intel-iot-devkit/upm/archive/${UMPCOMMIT}.tar.gz \
+		| tar -v -C /usr/src -xz && \
+    cd /usr/src/upm-${UMPCOMMIT} && \
     mkdir build && \
     cd build && \
     cmake .. -DBUILDSWIGNODE=OFF && \
