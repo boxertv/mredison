@@ -8,6 +8,7 @@ import irc.strings
 from irc.client import ip_numstr_to_quad, ip_quad_to_numstr
 
 import hashlib
+import os
 
 myLcd = lcd.Jhd1313m1(0, 0x3E, 0x62)
 
@@ -63,10 +64,10 @@ class TestBot(irc.bot.SingleServerIRCBot):
 		return
 
 def main():
-	server = "irc.freenode.net"
-	port = 6667
-	channel = "#mredison"
-	nickname = "mredison3"
+	server = os.getenv('SERVER', "irc.freenet.net")
+	port = int(os.getenv('PORT', 6667))
+	channel = os.getenv('CHANNEL', "#mredison")
+	nickname = os.getenv('NICK', "mredison")
 
 	bot = TestBot(channel, nickname, server, port)
 	bot.start()
