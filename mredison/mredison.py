@@ -7,13 +7,14 @@ import irc.bot
 import irc.strings
 from irc.client import ip_numstr_to_quad, ip_quad_to_numstr
 
+import hashlib
+
 myLcd = lcd.Jhd1313m1(0, 0x3E, 0x62)
 
 # Clear
 myLcd.clear()
 
-# A kinda blue
-myLcd.setColor(0x30, 0x2F, 0xFF)
+myLcd.setColor(0xFF, 0xFF, 0xFF)
 
 x = mraa.Gpio(4)
 x.dir(mraa.DIR_OUT)
@@ -48,11 +49,15 @@ class TestBot(irc.bot.SingleServerIRCBot):
 
 	def on_pubmsg(self, c, e):
 		a = e.arguments[0].split(":", 1)
-		user = e.source.split("!", 1)[0]
-		message = e.arguments[0]
+		user = e.source.split("!", 1)[0].encode('ascii', 'replace')
+		message = e.arguments[0].encode('ascii', 'replace')
+		h = hashlib.sha256()
+		h.update(user)
+		r, g, b = int(h.hexdigest()[0:2], 16), int(h.hexdigest()[2:4], 16), int(h.hexdigest()[4:6], 16)
 		print "%s: %s" %(user, message)
+		myLcd.setColor(r, g, b)
 		myLcd.setCursor(0,0)
-		myLcd.write("%s:" %(user))
+		myLcd.write("%s:", %(user))
 		myLcd.setCursor(1,0)
 		myLcd.write(message)
 		return
