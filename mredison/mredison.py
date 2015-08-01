@@ -120,6 +120,23 @@ class TestBot(irc.bot.SingleServerIRCBot):
         self.display['time'] = time.time()
         return
 
+    def on_ctcp(self, c, e):
+        """Default handler for ctcp events.
+
+        Replies to VERSION and PING requests and relays DCC requests
+        to the on_dccchat method.
+        """
+        nick = e.source.nick
+        if e.arguments[0] == "VERSION":
+            c.ctcp_reply(nick, "VERSION " + self.get_version())
+        elif e.arguments[0] == "PING":
+            print "PING"
+            if len(e.arguments) > 1:
+                c.ctcp_reply(nick, "PONG " + e.arguments[1])
+        elif e.arguments[0] == "DCC" and e.arguments[1].split(" ", 1)[0] == "CHAT":
+            self.on_dccchat(c, e)
+
+
 def main():
     server = os.getenv('SERVER', "irc.freenet.net")
     port = int(os.getenv('PORT', 6697))
