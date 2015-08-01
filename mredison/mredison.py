@@ -19,7 +19,7 @@ LcdWidth = 16
 # Clear
 myLcd.clear()
 
-myLcd.setColor(0xFF, 0xFF, 0xFF)
+myLcd.setColor(0x33, 0x33, 0x33)
 
 x = mraa.Gpio(4)
 x.dir(mraa.DIR_OUT)
