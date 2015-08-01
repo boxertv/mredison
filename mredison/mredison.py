@@ -21,24 +21,8 @@ myLcd.clear()
 
 myLcd.setColor(0x33, 0x33, 0x33)
 
-x = mraa.Gpio(4)
-x.dir(mraa.DIR_OUT)
-
-period = 0.15
-# ledvalue = 1
-
-# filler_text = 'Hello Mr. Edison, what\'s going on?'
-
-# long_string = ' '*15 + filler_text + ' '*15
-# while(1):
-#     for i in range(len(long_string) - 16 + 1):
-#          framebuffer = long_string[i:i+16]
-#          myLcd.setCursor(0,0)
-#          myLcd.write(framebuffer)
-#          print(framebuffer)
-#          x.write(ledvalue)
-#          ledvalue = 1 - ledvalue
-#          time.sleep(period)
+led = mraa.Gpio(4)
+led.dir(mraa.DIR_OUT)
 
 def scrolling(display):
     """ Thread to create scrolling effect """
@@ -69,6 +53,16 @@ def scrolling(display):
                     i = 0
         time.sleep(0.2)
 
+def ledblink(display):
+    while(True):
+        if display.led:
+            display.led = False
+            for i in range(3):
+                led.write(1)
+                time.sleep(0.2)
+                led.write(0)
+                time.sleep(0.2)
+        sleep(0.1)
 
 class TestBot(irc.bot.SingleServerIRCBot):
     def __init__(self, channel, nickname, server, port=6697):
@@ -86,8 +80,11 @@ class TestBot(irc.bot.SingleServerIRCBot):
         self.display = self.manager.dict()
         self.display['text'] = ''
         self.display['time'] = 0
-        process = Process(target=scrolling, args=(self.display,))
-        process.start()
+        self.display['led'] = False
+        showdisplay = Process(target=scrolling, args=(self.display,))
+        showdisplay.start()
+        blink = Process(target=ledblink, args=(self.display,))
+        blink.start()
 
     def on_nicknameinuse(self, c, e):
         c.nick(c.get_nickname() + "_")
