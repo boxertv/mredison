@@ -55,8 +55,8 @@ def scrolling(display):
 
 def ledblink(display):
     while(True):
-        if display.led:
-            display.led = False
+        if display['led']:
+            display['led'] = False
             for i in range(2):
                 led.write(1)
                 time.sleep(0.1)
