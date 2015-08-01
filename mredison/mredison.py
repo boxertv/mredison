@@ -14,6 +14,7 @@ from multiprocessing import Process, Manager
 
 
 myLcd = lcd.Jhd1313m1(0, 0x3E, 0x62)
+LcdWidth = 16
 
 # Clear
 myLcd.clear()
@@ -43,7 +44,7 @@ def scrolling(display):
     """ Thread to create scrolling effect """
     lasttime = 0.0
     i = 0
-    n = 16
+    n = LcdWidth
     while(True):
         if display['time'] > lasttime:
             lasttime = display['time']
@@ -107,10 +108,10 @@ class TestBot(irc.bot.SingleServerIRCBot):
         r, g, b = int(h.hexdigest()[0:2], 16), int(h.hexdigest()[2:4], 16), int(h.hexdigest()[4:6], 16)
         print "%s: %s" %(user, message)
 
-        if len(user) < n:
+        if len(user) < LcdWidth:
             showuser = user + ":"
         else:
-            showuser = user[0:12] + "...:"
+            showuser = user[0:(LcdWidth-4)] + "...:"
 
         myLcd.clear()
         myLcd.setColor(r, g, b)
