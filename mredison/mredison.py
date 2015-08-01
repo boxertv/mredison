@@ -97,7 +97,8 @@ class TestBot(irc.bot.SingleServerIRCBot):
         c.join(self.channel)
 
     def on_join(self, c, e):
-        print "joined"
+        if self._get_user(e) == c.get_nickname():
+            print "joined channel"
 
     def on_pubmsg(self, c, e):
         a = e.arguments[0].split(":", 1)
@@ -137,6 +138,9 @@ class TestBot(irc.bot.SingleServerIRCBot):
         elif e.arguments[0] == "DCC" and e.arguments[1].split(" ", 1)[0] == "CHAT":
             self.on_dccchat(c, e)
 
+    def _get_user(self, e):
+        """ Helper function: get user from the event """
+        return e.source.split("!", 1)[0].encode('ascii', 'replace')
 
 def main():
     server = os.getenv('SERVER', "irc.freenet.net")
