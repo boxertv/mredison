@@ -12,17 +12,18 @@ import ssl
 
 from multiprocessing import Process, Manager
 
+###### Setting up at start
 
-myLcd = lcd.Jhd1313m1(0, 0x3E, 0x62)
 LcdWidth = 16
 
-# Clear
+myLcd = lcd.Jhd1313m1(0, 0x3E, 0x62)
 myLcd.clear()
-
 myLcd.setColor(0x33, 0x33, 0x33)
 
 led = mraa.Gpio(4)
 led.dir(mraa.DIR_OUT)
+
+###### End setting up
 
 def scrolling(display):
     """ Thread to create scrolling effect """
@@ -54,6 +55,8 @@ def scrolling(display):
         time.sleep(0.2)
 
 def ledblink(display):
+    """Notification LED: blink when it's told to through shared variable
+    """
     while(True):
         if display['led']:
             display['led'] = False
@@ -76,6 +79,8 @@ class TestBot(irc.bot.SingleServerIRCBot):
                                             **connect_params
                                            )
         self.channel = channel
+
+        # Display threads and variables setup
         self.manager = Manager()
         self.display = self.manager.dict()
         self.display['text'] = ''
@@ -87,6 +92,8 @@ class TestBot(irc.bot.SingleServerIRCBot):
         blink.start()
 
     def on_nicknameinuse(self, c, e):
+        """Handle nickname collision by adjusting the base name
+        """
         c.nick(c.get_nickname() + "_")
 
     def on_welcome(self, c, e):
@@ -98,6 +105,8 @@ class TestBot(irc.bot.SingleServerIRCBot):
             print "joined channel"
 
     def on_pubmsg(self, c, e):
+        """Handle message on the channel to process and display
+        """
         a = e.arguments[0].split(":", 1)
         user = e.source.split("!", 1)[0].encode('ascii', 'replace')
         message = e.arguments[0].encode('ascii', 'replace')
@@ -119,27 +128,13 @@ class TestBot(irc.bot.SingleServerIRCBot):
         self.display['time'] = time.time()
         return
 
-    def on_ctcp(self, c, e):
-        """Default handler for ctcp events.
-
-        Replies to VERSION and PING requests and relays DCC requests
-        to the on_dccchat method.
-        """
-        nick = e.source.nick
-        if e.arguments[0] == "VERSION":
-            c.ctcp_reply(nick, "VERSION " + self.get_version())
-        elif e.arguments[0] == "PING":
-            print "PING"
-            if len(e.arguments) > 1:
-                c.ctcp_reply(nick, "PING " + e.arguments[1])
-        elif e.arguments[0] == "DCC" and e.arguments[1].split(" ", 1)[0] == "CHAT":
-            self.on_dccchat(c, e)
-
     def _get_user(self, e):
         """ Helper function: get user from the event """
         return e.source.split("!", 1)[0].encode('ascii', 'replace')
 
 def main():
+    """ Starting the IRC bot with the proper environmental variables
+    """
     server = os.getenv('SERVER', "irc.freenet.net")
     port = int(os.getenv('PORT', 6697))
     channel = os.getenv('CHANNEL', "#mredison")
