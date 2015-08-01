@@ -62,7 +62,7 @@ def ledblink(display):
                 time.sleep(0.1)
                 led.write(0)
                 time.sleep(0.1)
-        sleep(0.1)
+        time.sleep(0.1)
 
 class TestBot(irc.bot.SingleServerIRCBot):
     def __init__(self, channel, nickname, server, port=6697):
