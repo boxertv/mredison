@@ -57,11 +57,11 @@ def ledblink(display):
     while(True):
         if display.led:
             display.led = False
-            for i in range(3):
+            for i in range(2):
                 led.write(1)
-                time.sleep(0.2)
+                time.sleep(0.1)
                 led.write(0)
-                time.sleep(0.2)
+                time.sleep(0.1)
         sleep(0.1)
 
 class TestBot(irc.bot.SingleServerIRCBot):
