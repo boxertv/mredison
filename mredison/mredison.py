@@ -5,11 +5,13 @@ import os
 
 import irc.bot
 import irc.strings
-from irc.client import ip_numstr_to_quad, ip_quad_to_numstr
 
 import hashlib
 import os
 import ssl
+
+from multiprocessing import Process, Manager
+
 
 myLcd = lcd.Jhd1313m1(0, 0x3E, 0x62)
 
@@ -37,6 +39,36 @@ period = 0.15
 #          ledvalue = 1 - ledvalue
 #          time.sleep(period)
 
+def scrolling(display):
+    """ Thread to create scrolling effect """
+    lasttime = 0.0
+    i = 0
+    n = 16
+    while(True):
+        if display['time'] > lasttime:
+            lasttime = display['time']
+            i = 0
+        else:
+            text = display['text']
+            text_length = len(text)
+            if (text_length <= n):
+                showtext = text + " "*(n - text_length)
+                # print(showtext)
+                myLcd.setCursor(1, 0)
+                myLcd.write(showtext)
+            else:
+                showtext = text + " "*(n-1)
+                # print(showtext[i:i+n])
+                myLcd.setCursor(1, 0)
+                myLcd.write(showtext[i:i+n])
+                if (i == 0):
+                    time.sleep(1)
+                i += 1
+                if (i > text_length):
+                    i = 0
+        time.sleep(0.2)
+
+
 class TestBot(irc.bot.SingleServerIRCBot):
     def __init__(self, channel, nickname, server, port=6697):
         connect_params = {}
@@ -49,6 +81,12 @@ class TestBot(irc.bot.SingleServerIRCBot):
                                             **connect_params
                                            )
         self.channel = channel
+        self.manager = Manager()
+        self.display = self.manager.dict()
+        self.display['text'] = ''
+        self.display['time'] = 0
+        process = Process(target=scrolling, args=(self.display,))
+        process.start()
 
     def on_nicknameinuse(self, c, e):
         c.nick(c.get_nickname() + "_")
@@ -68,12 +106,18 @@ class TestBot(irc.bot.SingleServerIRCBot):
         h.update(user)
         r, g, b = int(h.hexdigest()[0:2], 16), int(h.hexdigest()[2:4], 16), int(h.hexdigest()[4:6], 16)
         print "%s: %s" %(user, message)
+
+        if len(user) < n:
+            showuser = user + ":"
+        else:
+            showuser = user[0:12] + "...:"
+
         myLcd.clear()
         myLcd.setColor(r, g, b)
-        myLcd.setCursor(0,0)
-        myLcd.write("%s:" %(user))
-        myLcd.setCursor(1,0)
-        myLcd.write(message)
+        myLcd.setCursor(0, 0)
+        myLcd.write(showuser)
+        self.display['text'] = message
+        self.display['time'] = time.time()
         return
 
 def main():
