@@ -40,9 +40,7 @@ period = 0.15
 class TestBot(irc.bot.SingleServerIRCBot):
     def __init__(self, channel, nickname, server, port=6697):
         connect_params = {}
-        connect_params['connect_factory'] = (
-             irc.connection.Factory(wrapper=ssl.wrap_socket)
-        )
+        connect_params['connect_factory'] = irc.connection.Factory(wrapper=ssl.wrap_socket)
         irc.bot.SingleServerIRCBot.__init__(self,
                                             [(server, port)],
                                             nickname,
