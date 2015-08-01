@@ -37,44 +37,44 @@ period = 0.15
 #          time.sleep(period)
 
 class TestBot(irc.bot.SingleServerIRCBot):
-	def __init__(self, channel, nickname, server, port=6667):
-		irc.bot.SingleServerIRCBot.__init__(self, [(server, port)], nickname, nickname)
-		self.channel = channel
+    def __init__(self, channel, nickname, server, port=6667):
+        irc.bot.SingleServerIRCBot.__init__(self, [(server, port)], nickname, nickname)
+        self.channel = channel
 
-	def on_nicknameinuse(self, c, e):
-		c.nick(c.get_nickname() + "_")
+    def on_nicknameinuse(self, c, e):
+        c.nick(c.get_nickname() + "_")
 
-	def on_welcome(self, c, e):
-		print "connected"
-		c.join(self.channel)
+    def on_welcome(self, c, e):
+        print "connected"
+        c.join(self.channel)
 
-	def on_join(self, c, e):
-		print "joined"
+    def on_join(self, c, e):
+        print "joined"
 
-	def on_pubmsg(self, c, e):
-		a = e.arguments[0].split(":", 1)
-		user = e.source.split("!", 1)[0].encode('ascii', 'replace')
-		message = e.arguments[0].encode('ascii', 'replace')
-		h = hashlib.sha256()
-		h.update(user)
-		r, g, b = int(h.hexdigest()[0:2], 16), int(h.hexdigest()[2:4], 16), int(h.hexdigest()[4:6], 16)
-		print "%s: %s" %(user, message)
-		myLcd.clear()
-		myLcd.setColor(r, g, b)
-		myLcd.setCursor(0,0)
-		myLcd.write("%s:" %(user))
-		myLcd.setCursor(1,0)
-		myLcd.write(message)
-		return
+    def on_pubmsg(self, c, e):
+        a = e.arguments[0].split(":", 1)
+        user = e.source.split("!", 1)[0].encode('ascii', 'replace')
+        message = e.arguments[0].encode('ascii', 'replace')
+        h = hashlib.sha256()
+        h.update(user)
+        r, g, b = int(h.hexdigest()[0:2], 16), int(h.hexdigest()[2:4], 16), int(h.hexdigest()[4:6], 16)
+        print "%s: %s" %(user, message)
+        myLcd.clear()
+        myLcd.setColor(r, g, b)
+        myLcd.setCursor(0,0)
+        myLcd.write("%s:" %(user))
+        myLcd.setCursor(1,0)
+        myLcd.write(message)
+        return
 
 def main():
-	server = os.getenv('SERVER', "irc.freenet.net")
-	port = int(os.getenv('PORT', 6667))
-	channel = os.getenv('CHANNEL', "#mredison")
-	nickname = os.getenv('NICK', "mredison")
+    server = os.getenv('SERVER', "irc.freenet.net")
+    port = int(os.getenv('PORT', 6667))
+    channel = os.getenv('CHANNEL', "#mredison")
+    nickname = os.getenv('NICK', "mredison")
 
-	bot = TestBot(channel, nickname, server, port)
-	bot.start()
+    bot = TestBot(channel, nickname, server, port)
+    bot.start()
 
 if __name__ == "__main__":
-	main()
+    main()
