@@ -9,6 +9,7 @@ from irc.client import ip_numstr_to_quad, ip_quad_to_numstr
 
 import hashlib
 import os
+import ssl
 
 myLcd = lcd.Jhd1313m1(0, 0x3E, 0x62)
 
