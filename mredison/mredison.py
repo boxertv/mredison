@@ -78,7 +78,7 @@ class TestBot(irc.bot.SingleServerIRCBot):
 
 def main():
     server = os.getenv('SERVER', "irc.freenet.net")
-    port = int(os.getenv('PORT', 6667))
+    port = int(os.getenv('PORT', 6697))
     channel = os.getenv('CHANNEL', "#mredison")
     nickname = os.getenv('NICK', "mredison")
 
