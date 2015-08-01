@@ -37,8 +37,18 @@ period = 0.15
 #          time.sleep(period)
 
 class TestBot(irc.bot.SingleServerIRCBot):
-    def __init__(self, channel, nickname, server, port=6667):
-        irc.bot.SingleServerIRCBot.__init__(self, [(server, port)], nickname, nickname)
+    def __init__(self, channel, nickname, server, port=6697):
+        connect_params = {}
+        connect_params['connect_factory'] = (
+             irc.connection.Factory(wrapper=ssl.wrap_socket)
+        )
+        irc.bot.SingleServerIRCBot.__init__(self,
+                                            [(server, port)],
+                                            nickname,
+                                            nickname,
+                                            30,
+                                            **connect_params
+                                           )
         self.channel = channel
 
     def on_nicknameinuse(self, c, e):
