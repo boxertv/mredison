@@ -133,7 +133,7 @@ class TestBot(irc.bot.SingleServerIRCBot):
         elif e.arguments[0] == "PING":
             print "PING"
             if len(e.arguments) > 1:
-                c.ctcp_reply(nick, "PONG " + e.arguments[1])
+                c.ctcp_reply(nick, "PING " + e.arguments[1])
         elif e.arguments[0] == "DCC" and e.arguments[1].split(" ", 1)[0] == "CHAT":
             self.on_dccchat(c, e)
 
