@@ -34,6 +34,7 @@ def scrolling(display):
         if display['time'] > lasttime:
             lasttime = display['time']
             i = 0
+            display['led'] = True
         else:
             text = display['text']
             text_length = len(text)
