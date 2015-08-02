@@ -114,8 +114,9 @@ class TestBot(irc.bot.SingleServerIRCBot):
         h = hashlib.sha256()
         h.update(user)
         r, g, b = int(h.hexdigest()[0:2], 16), int(h.hexdigest()[2:4], 16), int(h.hexdigest()[4:6], 16)
-        messagetime = time.strftime("%H:%M")
-        print "%s %s: %s" %(messagetime, user, message)
+        # messagetime = time.strftime("%H:%M")
+        # print "%s %s: %s" %(messagetime, user, message)
+        print "%s: %s" %(user, message)
 
         if len(user) < LcdWidth:
             showuser = user + ":"
@@ -126,7 +127,8 @@ class TestBot(irc.bot.SingleServerIRCBot):
         myLcd.setColor(r, g, b)
         myLcd.setCursor(0, 0)
         myLcd.write(showuser)
-        self.display['text'] = messagetime + " " + message
+        # self.display['text'] = messagetime + " " + message
+        self.display['text'] = message
         self.display['time'] = time.time()
         return
 
