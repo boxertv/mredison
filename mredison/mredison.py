@@ -31,42 +31,50 @@ def scrolling(display):
     i = 0
     n = LcdWidth
     while(True):
-        if display['time'] > lasttime:
-            lasttime = display['time']
-            i = 0
-            display['led'] = True
-        else:
-            text = display['text']
-            text_length = len(text)
-            if (text_length <= n):
-                showtext = text + " "*(n - text_length)
-                # print(showtext)
-                myLcd.setCursor(1, 0)
-                myLcd.write(showtext)
+        try:
+            if display['time'] > lasttime:
+                lasttime = display['time']
+                i = 0
+                display['led'] = True
             else:
-                showtext = text + " "*(n-1)
-                # print(showtext[i:i+n])
-                myLcd.setCursor(1, 0)
-                myLcd.write(showtext[i:i+n])
-                if (i == 0):
-                    time.sleep(1)
-                i += 1
-                if (i > text_length):
-                    i = 0
-        time.sleep(0.2)
+                text = display['text']
+                text_length = len(text)
+                if (text_length <= n):
+                    showtext = text + " "*(n - text_length)
+                    # print(showtext)
+                    myLcd.setCursor(1, 0)
+                    myLcd.write(showtext)
+                else:
+                    showtext = text + " "*(n-1)
+                    # print(showtext[i:i+n])
+                    myLcd.setCursor(1, 0)
+                    myLcd.write(showtext[i:i+n])
+                    if (i == 0):
+                        time.sleep(1)
+                    i += 1
+                    if (i > text_length):
+                        i = 0
+            time.sleep(0.2)
+        except IOerror:
+            time.sleep(0.1)
+            pass
 
 def ledblink(display):
     """Notification LED: blink when it's told to through shared variable
     """
     while(True):
-        if display['led']:
-            display['led'] = False
-            for i in range(2):
-                led.write(1)
-                time.sleep(0.1)
-                led.write(0)
-                time.sleep(0.1)
-        time.sleep(0.1)
+        try:
+            if display['led']:
+                display['led'] = False
+                for i in range(2):
+                    led.write(1)
+                    time.sleep(0.1)
+                    led.write(0)
+                    time.sleep(0.1)
+            time.sleep(0.1)
+        except IOerror:
+            time.sleep(0.1)
+            pass
 
 class TestBot(irc.bot.SingleServerIRCBot):
     def __init__(self, channel, nickname, server, port=6697):
