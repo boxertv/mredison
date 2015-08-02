@@ -26,6 +26,6 @@ ADD /mredison /mredison
 
 WORKDIR /mredison
 
-COPY ./docker-entrypoint.sh /
+COPY ./*.sh /
 
 CMD ["/docker-entrypoint.sh"]
