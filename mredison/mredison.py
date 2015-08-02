@@ -55,7 +55,7 @@ def scrolling(display):
                     if (i > text_length):
                         i = 0
             time.sleep(0.2)
-        except IOerror:
+        except IOError:
             time.sleep(0.1)
             pass
 
@@ -72,7 +72,7 @@ def ledblink(display):
                     led.write(0)
                     time.sleep(0.1)
             time.sleep(0.1)
-        except IOerror:
+        except IOError:
             time.sleep(0.1)
             pass
 
