@@ -1,7 +1,12 @@
 #!/bin/bash
 
 # Mount needed for GPIO pins to be enabled correctly
-mount -t debugfs nodev /sys/kernel/debug
+if mount -l -t debugfs | grep "on /sys/kernel/debug"; then
+    echo "debugfs already mounted"
+else
+    mount -t debugfs nodev /sys/kernel/debug
+fi
+
 
 # From http://www.emutexlabs.com/project/215-intel-edison-gpio-pin-multiplexing-guide
 # Example 4: Configure IO18/IO19 for I2C connectivity
