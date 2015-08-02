@@ -16,21 +16,21 @@ echo "Setting up GPIO"
 # IO18 Pin Multiplexing
 IO18=(14 27 204 236 212)
 for i in ${IO18[@]}; do
-    if [ ! -f /sys/class/gpio/gpio$i ]; then
-	echo $i > /sys/class/gpio/export
+    if [ ! -e /sys/class/gpio/gpio${i} ]; then
+	echo ${i} > /sys/class/gpio/export
     fi
 done
 
 # IO19 Pin Multiplexing
 IO19=(165 28 205 237 213)
 for i in ${IO19[@]}; do
-    if [ ! -f /sys/class/gpio/gpio$i ]; then
-	echo $i > /sys/class/gpio/export
+    if [ ! -e /sys/class/gpio/gpio${i} ]; then
+	echo ${i} > /sys/class/gpio/export
     fi
 done
 
 # TRI_STATE_ALL low before all changes
-if [ ! -f /sys/class/gpio/gpio214 ]; then
+if [ ! -e /sys/class/gpio/gpio214 ]; then
     echo 214 > /sys/class/gpio/export
 fi
 echo low > /sys/class/gpio/gpio214/direction 
