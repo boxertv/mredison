@@ -6,6 +6,8 @@ mount -t debugfs nodev /sys/kernel/debug
 # From http://www.emutexlabs.com/project/215-intel-edison-gpio-pin-multiplexing-guide
 # Example 4: Configure IO18/IO19 for I2C connectivity
 
+echo "Setting up GPIO"
+
 echo 28 > /sys/class/gpio/export 
 echo 27 > /sys/class/gpio/export 
 echo 204 > /sys/class/gpio/export 
