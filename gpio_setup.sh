@@ -8,26 +8,47 @@ mount -t debugfs nodev /sys/kernel/debug
 
 echo "Setting up GPIO"
 
-echo 28 > /sys/class/gpio/export 
-echo 27 > /sys/class/gpio/export 
-echo 204 > /sys/class/gpio/export 
-echo 205 > /sys/class/gpio/export 
-echo 236 > /sys/class/gpio/export 
-echo 237 > /sys/class/gpio/export 
-echo 14 > /sys/class/gpio/export 
-echo 165 > /sys/class/gpio/export 
-echo 212 > /sys/class/gpio/export 
-echo 213 > /sys/class/gpio/export 
-echo 214 > /sys/class/gpio/export 
+# IO18 Pin Multiplexing
+IO18=(14 27 204 236 212)
+for i in ${IO18[@]}; do
+    if [ ! -f /sys/class/gpio/gpio$i ]; then
+	echo $i > /sys/class/gpio/export
+    fi
+done
+
+# IO19 Pin Multiplexing
+IO19=(165 28 205 237 213)
+for i in ${IO19[@]}; do
+    if [ ! -f /sys/class/gpio/gpio$i ]; then
+	echo $i > /sys/class/gpio/export
+    fi
+done
+
+# TRI_STATE_ALL low before all changes
+if [ ! -f /sys/class/gpio/gpio214 ]; then
+    echo 214 > /sys/class/gpio/export
+fi
 echo low > /sys/class/gpio/gpio214/direction 
+
+## Set up parameters
+# I2C
 echo low > /sys/class/gpio/gpio204/direction 
-echo low > /sys/class/gpio/gpio205/direction 
+echo low > /sys/class/gpio/gpio205/direction
+# Set as input
 echo in > /sys/class/gpio/gpio14/direction 
 echo in > /sys/class/gpio/gpio165/direction 
+# Disable output
 echo low > /sys/class/gpio/gpio236/direction 
 echo low > /sys/class/gpio/gpio237/direction 
+# Enable pull-up
 echo in > /sys/class/gpio/gpio212/direction 
-echo in > /sys/class/gpio/gpio213/direction 
+echo in > /sys/class/gpio/gpio213/direction
+# I2C-6
 echo mode1 > /sys/kernel/debug/gpio_debug/gpio28/current_pinmux 
 echo mode1 > /sys/kernel/debug/gpio_debug/gpio27/current_pinmux 
+
+# Re-enabled TRI_STATE_ALL
 echo high > /sys/class/gpio/gpio214/direction
+
+# Let it rest
+sleep 1
