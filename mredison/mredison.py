@@ -89,6 +89,10 @@ class TestBot(irc.bot.SingleServerIRCBot):
                                            )
         self.channel = channel
 
+        ## Make sure not to choke on non-Unicode characters
+        ## The default DecodingLineBuffer can crash with UnicodeDecodeError
+        self.connection.buffer_class = irc.buffer.LenientDecodingLineBuffer
+
         # Display threads and variables setup
         self.manager = Manager()
         self.display = self.manager.dict()
