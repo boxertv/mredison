@@ -13,7 +13,7 @@ fi
 
 echo "Setting up GPIO"
 
-# IO18 Pin Multiplexing
+# IO18/SDA Pin Multiplexing
 IO18=(14 27 204 236 212)
 for i in ${IO18[@]}; do
     if [ ! -e /sys/class/gpio/gpio${i} ]; then
@@ -21,7 +21,7 @@ for i in ${IO18[@]}; do
     fi
 done
 
-# IO19 Pin Multiplexing
+# IO19/SCL Pin Multiplexing
 IO19=(165 28 205 237 213)
 for i in ${IO19[@]}; do
     if [ ! -e /sys/class/gpio/gpio${i} ]; then
