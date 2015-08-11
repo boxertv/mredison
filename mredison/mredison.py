@@ -12,6 +12,9 @@ import ssl
 
 from multiprocessing import Process, Manager
 
+from datetime import datetime
+import pytz
+
 ###### Setting up at start
 
 LcdWidth = 16
@@ -77,7 +80,7 @@ def ledblink(display):
             pass
 
 class TestBot(irc.bot.SingleServerIRCBot):
-    def __init__(self, channel, nickname, server, port=6697):
+    def __init__(self, channel, nickname, server, port=6697, timezone='UTC'):
         connect_params = {}
         connect_params['connect_factory'] = irc.connection.Factory(wrapper=ssl.wrap_socket)
         irc.bot.SingleServerIRCBot.__init__(self,
@@ -88,6 +91,7 @@ class TestBot(irc.bot.SingleServerIRCBot):
                                             **connect_params
                                            )
         self.channel = channel
+        self.timezone = pytz.timezone(timezone)
 
         ## Make sure not to choke on non-Unicode characters
         ## The default DecodingLineBuffer can crash with UnicodeDecodeError
@@ -126,8 +130,9 @@ class TestBot(irc.bot.SingleServerIRCBot):
         h = hashlib.sha256()
         h.update(user)
         r, g, b = int(h.hexdigest()[0:2], 16), int(h.hexdigest()[2:4], 16), int(h.hexdigest()[4:6], 16)
-        # messagetime = time.strftime("%H:%M")
-        # print "%s %s: %s" %(messagetime, user, message)
+        utctime = datetime.utcnow()
+        utctime = utctime.replace(tzinfo=pytz.utc)
+        messagetime = u.astimezone(self.timezone).strftime("%H%M>")
         print "%s: %s" %(user, message)
 
         if len(user) < LcdWidth:
@@ -139,8 +144,8 @@ class TestBot(irc.bot.SingleServerIRCBot):
         myLcd.setColor(r, g, b)
         myLcd.setCursor(0, 0)
         myLcd.write(showuser)
-        # self.display['text'] = messagetime + " " + message
-        self.display['text'] = message
+        self.display['text'] = messagetime + " " + message
+        # self.display['text'] = message
         self.display['time'] = time.time()
         return
 
@@ -155,8 +160,9 @@ def main():
     port = int(os.getenv('PORT', 6697))
     channel = os.getenv('CHANNEL', "#mredison")
     nickname = os.getenv('NICK', "mredison")
+    timezone = os.getenv('TIMEZONE, 'UTV')
 
-    bot = TestBot(channel, nickname, server, port)
+    bot = TestBot(channel, nickname, server, port, timezone)
     bot.start()
 
 if __name__ == "__main__":
