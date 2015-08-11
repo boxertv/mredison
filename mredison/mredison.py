@@ -144,8 +144,8 @@ class TestBot(irc.bot.SingleServerIRCBot):
         myLcd.setColor(r, g, b)
         myLcd.setCursor(0, 0)
         myLcd.write(showuser)
-        # self.display['text'] = messagetime + " " + message
-        self.display['text'] = message
+        self.display['text'] = messagetime + " " + message
+        # self.display['text'] = message
         self.display['time'] = time.time()
         return
 
