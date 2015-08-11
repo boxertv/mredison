@@ -132,7 +132,7 @@ class TestBot(irc.bot.SingleServerIRCBot):
         r, g, b = int(h.hexdigest()[0:2], 16), int(h.hexdigest()[2:4], 16), int(h.hexdigest()[4:6], 16)
         utctime = datetime.utcnow()
         utctime = utctime.replace(tzinfo=pytz.utc)
-        messagetime = u.astimezone(self.timezone).strftime("%H%M>")
+        messagetime = utctime.astimezone(self.timezone).strftime("%H%M>")
         print "%s: %s" %(user, message)
 
         if len(user) < LcdWidth:
