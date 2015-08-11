@@ -160,7 +160,7 @@ def main():
     port = int(os.getenv('PORT', 6697))
     channel = os.getenv('CHANNEL', "#mredison")
     nickname = os.getenv('NICK', "mredison")
-    bottz = os.getenv('TIMEZONE, "UTC")
+    bottz = os.getenv('TIMEZONE', "UTC")
 
     bot = TestBot(channel, nickname, server, port, bottz)
     bot.start()
