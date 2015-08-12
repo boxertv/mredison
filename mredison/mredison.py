@@ -28,7 +28,7 @@ led.dir(mraa.DIR_OUT)
 
 ###### End setting up
 
-def getColourFromText(text):
+def getColoursFromText(text):
     """Calculate RGB value from first three bytes of the hash value
     of a string (using SHA-256)
     """
