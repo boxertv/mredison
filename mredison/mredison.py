@@ -153,7 +153,7 @@ class TestBot(irc.bot.SingleServerIRCBot):
 
         utctime = datetime.utcnow()
         utctime = utctime.replace(tzinfo=pytz.utc)
-        messagetime = utctime.astimezone(self.timezone).strftime("%H:%M ")
+        messagetime = utctime.astimezone(self.timezone).strftime("%H:%M")
 
         self.display['author'] = user
         self.display['text'] = messagetime + " " + message
