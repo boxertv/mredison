@@ -50,7 +50,7 @@ def scrolling(display):
 
                 author = display['author']
                 if len(author) < LcdWidth:
-                    showauthor = authorr + ":"
+                    showauthor = author + ":"
                 else:
                     showauthor = author[0:(LcdWidth-4)] + "...:"
 
