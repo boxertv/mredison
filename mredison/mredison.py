@@ -48,6 +48,18 @@ def scrolling(display):
                 lasttime = display['time']
                 i = 0
                 display['led'] = True
+
+                author = display['author']
+                if len(author) < LcdWidth:
+                    showauthor = authorr + ":"
+                else:
+                    showauthor = author[0:(LcdWidth-4)] + "...:"
+
+                myLcd.clear()
+                colours = getColoursFromText(author)
+                myLcd.setColor(*colours)
+                myLcd.setCursor(0, 0)
+                myLcd.write(showauthor)
             else:
                 text = display['text']
                 text_length = len(text)
@@ -109,8 +121,9 @@ class TestBot(irc.bot.SingleServerIRCBot):
         # Display threads and variables setup
         self.manager = Manager()
         self.display = self.manager.dict()
+        self.display['author'] = ''
         self.display['text'] = ''
-        self.display['time'] = 0
+        self.display['time'] = datetime.utcnow()
         self.display['led'] = False
         showdisplay = Process(target=scrolling, args=(self.display,))
         showdisplay.start()
@@ -136,26 +149,15 @@ class TestBot(irc.bot.SingleServerIRCBot):
         a = e.arguments[0].split(":", 1)
         user = e.source.split("!", 1)[0].encode('ascii', 'replace')
         message = e.arguments[0].encode('ascii', 'replace')
-        h = hashlib.sha256()
-        h.update(user)
-        r, g, b = int(h.hexdigest()[0:2], 16), int(h.hexdigest()[2:4], 16), int(h.hexdigest()[4:6], 16)
+        print "%s: %s" %(user, message)
+
         utctime = datetime.utcnow()
         utctime = utctime.replace(tzinfo=pytz.utc)
         messagetime = utctime.astimezone(self.timezone).strftime("%H:%M ")
-        print "%s: %s" %(user, message)
 
-        if len(user) < LcdWidth:
-            showuser = user + ":"
-        else:
-            showuser = user[0:(LcdWidth-4)] + "...:"
-
-        myLcd.clear()
-        myLcd.setColor(r, g, b)
-        myLcd.setCursor(0, 0)
-        myLcd.write(showuser)
+        self.display['author'] = user
         self.display['text'] = messagetime + " " + message
-        # self.display['text'] = message
-        self.display['time'] = time.time()
+        self.display['time'] = utctime
         return
 
     def _get_user(self, e):
