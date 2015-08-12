@@ -33,7 +33,7 @@ def getColoursFromText(text):
     of a string (using SHA-256)
     """
     h = hashlib.sha256()
-    h.update(user)
+    h.update(text)
     r, g, b = int(h.hexdigest()[0:2], 16), int(h.hexdigest()[2:4], 16), int(h.hexdigest()[4:6], 16)
     return (r, g, b)
 
