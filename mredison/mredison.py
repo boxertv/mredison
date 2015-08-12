@@ -28,6 +28,15 @@ led.dir(mraa.DIR_OUT)
 
 ###### End setting up
 
+def getColourFromText(text):
+    """Calculate RGB value from first three bytes of the hash value
+    of a string (using SHA-256)
+    """
+    h = hashlib.sha256()
+    h.update(user)
+    r, g, b = int(h.hexdigest()[0:2], 16), int(h.hexdigest()[2:4], 16), int(h.hexdigest()[4:6], 16)
+    return (r, g, b)
+
 def scrolling(display):
     """ Thread to create scrolling effect """
     lasttime = 0.0
