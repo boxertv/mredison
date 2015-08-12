@@ -39,15 +39,14 @@ def getColourFromText(text):
 
 def scrolling(display):
     """ Thread to create scrolling effect """
-    lasttime = datetime.min
     i = 0
     n = LcdWidth
     while(True):
         try:
-            if display['time'] > lasttime:
-                lasttime = display['time']
-                i = 0
+            if display['update']:
+                display['update'] = False
                 display['led'] = True
+                i = 0
 
                 author = display['author']
                 if len(author) < LcdWidth:
@@ -123,7 +122,7 @@ class TestBot(irc.bot.SingleServerIRCBot):
         self.display = self.manager.dict()
         self.display['author'] = ''
         self.display['text'] = ''
-        self.display['time'] = datetime.min
+        self.display['update'] = False
         self.display['led'] = False
         showdisplay = Process(target=scrolling, args=(self.display,))
         showdisplay.start()
@@ -157,7 +156,7 @@ class TestBot(irc.bot.SingleServerIRCBot):
 
         self.display['author'] = user
         self.display['text'] = messagetime + " " + message
-        self.display['time'] = utctime
+        self.display['update'] = True
         return
 
     def _get_user(self, e):
