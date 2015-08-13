@@ -7,7 +7,7 @@ MAINTAINER Gergely Imreh <imrehg@gmail.com>
 ENV INITSYSTEM on
 
 # Update commit if need to recompile library
-ENV UPMCOMMIT ef28607ceadb9868215d703bc8594c5270dca75e
+ENV UPMCOMMIT 58c800e246d3f7b7f2f4e58140386bcf0ba26693
 RUN curl -sSL https://github.com/intel-iot-devkit/upm/archive/$UPMCOMMIT.tar.gz \
 		| tar -v -C /usr/src -xz && \
     cd /usr/src/upm-$UPMCOMMIT && \
