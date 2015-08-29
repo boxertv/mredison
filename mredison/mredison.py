@@ -15,6 +15,8 @@ from multiprocessing import Process, Manager
 from datetime import datetime
 import pytz
 
+import melody
+
 ###### Setting up at start
 
 LcdWidth = 16
@@ -25,6 +27,8 @@ myLcd.setColor(0x33, 0x33, 0x33)
 
 led = mraa.Gpio(4)
 led.dir(mraa.DIR_OUT)
+
+buzzer = melody(2)
 
 ###### End setting up
 
@@ -94,6 +98,7 @@ def ledblink(display):
                     time.sleep(0.1)
                     led.write(0)
                     time.sleep(0.1)
+                buzzer.playGTA()
             time.sleep(0.1)
         except IOError:
             time.sleep(0.1)
