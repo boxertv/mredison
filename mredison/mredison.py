@@ -29,6 +29,8 @@ led.dir(mraa.DIR_OUT)
 
 # using GPIO pin 5, has to be a PWM capable pin
 buzzer = upmBuzzer.Buzzer(5)
+buzzerVolume = 0.25
+buzzer.playSound(3000, 1) # arbitrary for set up
 
 ###### End setting up
 
@@ -123,14 +125,13 @@ def playGTA():
     playMelody(pager, tempo)
 
 def playMelody(melody, tempo):
-    defaultVolume = 0.5
-    buzzer.setVolume(defaultVolume)
+    buzzer.setVolume(buzzerVolume)
     for m in melody:
         note, beat = m
         if note == " ":
             buzzer.setVolume(0.0)
             buzzer.playSound(3000, beat * tempo)
-            buzzer.setVolume(defaultVolume)
+            buzzer.setVolume(buzzerVolume)
         else:
             buzzer.playSound(notes[note], beat * tempo)
 
