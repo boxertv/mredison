@@ -19,7 +19,7 @@ RUN curl -sSL https://github.com/intel-iot-devkit/upm/archive/$UPMCOMMIT.tar.gz 
 
 # For caching until requirements.txt changes
 ADD ./requirements.txt /requirements.txt
-RUN pip install -r /requirements.txt
+RUN pip install --upgrade -r /requirements.txt
 
 # Main code
 ADD /mredison /mredison
