@@ -17,6 +17,9 @@ RUN curl -sSL https://github.com/intel-iot-devkit/upm/archive/$UPMCOMMIT.tar.gz 
     make && \
     make install
 
+# Upgrade setuptools
+RUN pip install --upgrade setuptools
+
 # For caching until requirements.txt changes
 ADD ./requirements.txt /requirements.txt
 RUN pip install --upgrade -r /requirements.txt
