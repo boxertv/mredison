@@ -1,6 +1,7 @@
 import mraa
 import time
 import pyupm_i2clcd as lcd
+import pyupm_buzzer as upmBuzzer
 import os
 
 import irc.bot
@@ -25,6 +26,9 @@ myLcd.setColor(0x33, 0x33, 0x33)
 
 led = mraa.Gpio(4)
 led.dir(mraa.DIR_OUT)
+
+# using GPIO pin 5, has to be a PWM capable pin
+buzzer = upmBuzzer.Buzzer(5)
 
 ###### End setting up
 
@@ -94,10 +98,41 @@ def ledblink(display):
                     time.sleep(0.1)
                     led.write(0)
                     time.sleep(0.1)
+                playGTA()
             time.sleep(0.1)
         except IOError:
             time.sleep(0.1)
             pass
+
+notes = {"X1": 471, # 2124Hz
+         "X2": 422, # 2370Hz
+         "X3": 413, # 2423Hz
+         "X4": 389, # 2570Hz
+         "X5": 372, # 2690Hz
+         "X6": 368, # 2720Hz
+         "X7": 349} # 2865Hz
+def playGTA():
+    tempo = 60 * 1000
+    pager = [("X7", 5), ("X7", 5), ("X7", 1), (" ", 4),
+             ("X4", 2), ("X7", 2), ("X2", 2), ("X7", 2), (" ", 2),
+             ("X4", 2), ("X7", 5), (" ", 4),
+             ("X7", 2), (" ", 2),
+             ("X7", 5), ("X7", 1), (" ", 1),
+             ("X4", 5), ("X4", 5), ("X4", 1), (" ", 1),
+             ("X3", 5), ("X7", 5)]
+    playMelody(pager, tempo)
+
+def playMelody(melody, tempo):
+    defaultVolume = 0.5
+    buzzer.setVolume(defaultVolume)
+    for m in melody:
+        note, beat = m
+        if note == " ":
+            buzzer.setVolume(0.0)
+            buzzer.playSound(3000, beat * tempo)
+            buzzer.setVolume(defaultVolume)
+        else:
+            buzzer.playSound(notes[note], beat * tempo)
 
 class TestBot(irc.bot.SingleServerIRCBot):
     def __init__(self, channel, nickname, server, port=6697, timezone='UTC'):
