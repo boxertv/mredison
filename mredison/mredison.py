@@ -134,6 +134,10 @@ def playMelody(melody, tempo):
             buzzer.setVolume(buzzerVolume)
         else:
             buzzer.playSound(notes[note], beat * tempo)
+        # add a bit of trailing break
+        buzzer.setVolume(0.0)
+        buzzer.playSound(3000, int(0.1 * tempo))
+        buzzer.setVolume(buzzerVolume)
 
 class TestBot(irc.bot.SingleServerIRCBot):
     def __init__(self, channel, nickname, server, port=6697, timezone='UTC'):
